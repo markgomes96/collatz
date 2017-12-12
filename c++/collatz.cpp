@@ -4,6 +4,7 @@
 //Assignment 3 - Collatz Conjecture
 #include <iostream>
 #include <climits>
+#include <cstdio>
 
 using namespace std;
 
@@ -16,17 +17,16 @@ int main(int argc, char* argv[])
     unsigned long long int n;
     int count = 0;
     int mincount = 0;
-    //long check = 0;
     unsigned long long int maxcounts[10][2];    // counts, number
     
     //Zero out the array
     for(int i = 0; i < 10; i++)
     {
-        maxcounts[i][0] = (unsigned long long int)0;
-        maxcounts[i][1] = (unsigned long long int)0;
+        maxcounts[i][0] = 0;
+        maxcounts[i][1] = 0;
     }
         
-    while(num < ULLONG_MAX)
+    while(num < 5000000000)
     {
         n = num;
         do
@@ -37,23 +37,18 @@ int main(int argc, char* argv[])
             }
             else
             {
-                //check = n;
                 n = (n*3)+1;
-                //if(n < check)      //Checks if number is too high to be computed by the algorithm
-                //    goto End;
             }
             count = count + 1;
-            //System.out.print("Count: " + count + ": " + n + "\n");
         }while(n != 1);
-        cout << "Number " << num << " has " << count << " steps." << endl;
-        if(count > mincount)
+        //cout << "Number " << num << " has " << count << " steps." << endl;
+        if(count > mincount)      //If count is larger than min count in array then add it
         {
             UpdateArray(count, num, maxcounts, mincount);
         }
         num = num + 1;
         count = 0;
     }
-//End:
     //Sorted by step length
     cout << "***Array Sorted by Step Length***" << endl;
     ArraySort(maxcounts, 0);
@@ -82,7 +77,7 @@ void UpdateArray(int count, unsigned long long int num, unsigned long long int m
         {
             mincount  = (int)maxcounts[i][0];      //Stores the lowest count in the array
         }
-        if(count - (int)maxcounts[i][0] > diff)
+        if(count - (int)maxcounts[i][0] > diff)    //Keeps track of index that produces the largest difference between counts
         {
             diff = count - (int)maxcounts[i][0];
             index = i;
@@ -98,16 +93,24 @@ void UpdateArray(int count, unsigned long long int num, unsigned long long int m
 void ArraySort(unsigned long long int maxcounts[10][2], int mode)    //Mode: [1]Sort by step number; [2]Sort by number magnitude
 {
     unsigned long long int temp[10][2];
-    int maxval = 0,count = 0,index = 0;
-    long num = 0;
+    unsigned long long int maxval = 0;
+    int count = 0;
+    int index = 0;
+    unsigned long long int num = 0;
+    
+    for(int i = 0; i < 10; i++)
+    {
+        temp[i][0] = 0;
+        temp[i][1] = 0;
+    }
         
     for(int x = 0; x < 10; x++)
     {
         for(int i = 0; i < 10; i++)
         {
-            if(maxcounts[i][mode] >= (unsigned long long int)maxval)
+            if(maxcounts[i][mode] > maxval)
             {
-                maxval = (int)maxcounts[i][mode];
+                maxval = maxcounts[i][mode];
                 count = (int)maxcounts[i][0];
                 num = maxcounts[i][1];
                 index = i;
@@ -119,5 +122,9 @@ void ArraySort(unsigned long long int maxcounts[10][2], int mode)    //Mode: [1]
         maxcounts[index][1] = 0;
         maxval = 0;
     }
-    maxcounts = temp;
+    for(int i = 0; i < 10; i++)
+    {
+        maxcounts[i][0] = temp[i][0];
+        maxcounts[i][1] = temp[i][1];
+    }
 }

@@ -14,11 +14,10 @@ public class collatz
         ulong n;
         int count = 0;
         int mincount = 0;
-        ulong check = 0;
         
         ulong[,] maxcounts = new ulong[10, 2];    // counts, number
         
-        while(num < UInt64.MaxValue)
+        while(num < 5000000000)
         {
             n = num;
             do
@@ -29,23 +28,19 @@ public class collatz
                 }
                 else
                 {
-                    check = n;
                     n = (n*3)+1;
-                    if(n < check)      //Checks if number is too high to be computed by the algorithm
-                        goto End;
                 }
                 count = count + 1;
                 //Console.Write("Count: " + count + ": " + n + "\n");
             }while(n != 1);
-            Console.Write("Number " + num + " has " + count + " steps. \n");
-            if(count > mincount)
+            //Console.Write("Number " + num + " has " + count + " steps. \n");
+            if(count >= mincount)      //If count is larger than min count in array then add it
             {
                 UpdateArray(count, num, maxcounts, mincount);
             }
             num = num + 1;
             count = 0;
         }
-    End:
         //Sorted by step length
         Console.Write("***Array Sorted by Step Length*** \n");
         maxcounts = ArraySort(maxcounts, 0);
@@ -74,7 +69,7 @@ public class collatz
             {
                 mincount  = (int)maxcounts[i,0];      //Stores the lowest count in the array
             }
-            if(count - (int)maxcounts[i,0] > diff)
+            if(count - (int)maxcounts[i,0] > diff)     //Keeps track of index that produces the largest difference between counts
             {
                 diff = count - (int)maxcounts[i,0];
                 index = i;
@@ -87,7 +82,7 @@ public class collatz
         }
     }
     
-    static ulong[,] ArraySort(ulong[,] maxcounts, int mode)    //Mode: [1]Sort by step number; [2]Sort by number magnitude
+    static ulong[,] ArraySort(ulong[,] maxcounts, int mode)    //Mode: [0]Sort by step number; [1]Sort by number magnitude
     {
         ulong[,] temp = new ulong[10,2];
         int maxval = 0,count = 0,index = 0;

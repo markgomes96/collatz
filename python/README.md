@@ -4,4 +4,4 @@ Language : Python
 
 To Compile/Run:
 
-    python diffusion.py   
+    python collatz.py   

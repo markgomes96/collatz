@@ -8,15 +8,14 @@ public class collatz
 {
     public static void main(String[] args)
     {
-        long num = 1; 
+        long num = 5000000000; 
         long n;
         int count = 0;
         int mincount = 0;
-        //long check = 0;
         
         long[][] maxcounts = new long[10][2];    // counts, number
         
-        while(num < Long.MAX_VALUE)
+        while(num > 0)
         {
             n = num;
             do
@@ -27,23 +26,20 @@ public class collatz
                 }
                 else
                 {
-                    //check = n;
                     n = (n*3)+1;
-                    //if(n < check)      //Checks if number is too high to be computed by the algorithm
-                    //    goto End;
                 }
                 count = count + 1;
                 //System.out.print("Count: " + count + ": " + n + "\n");
             }while(n != 1);
             System.out.print("Number " + num + " has " + count + " steps. \n");
-            if(count > mincount)
+            if(count > mincount)      //If count is larger than min count in array then add it
             {
                 UpdateArray(count, num, maxcounts, mincount);
             }
-            num = num + 1;
+            num = num - 1;
             count = 0;
         }
-    //End:
+        
         //Sorted by step length
         System.out.print("***Array Sorted by Step Length*** \n");
         maxcounts = ArraySort(maxcounts, 0);
@@ -72,7 +68,7 @@ public class collatz
             {
                 mincount  = (int)maxcounts[i][0];      //Stores the lowest count in the array
             }
-            if(count - (int)maxcounts[i][0] > diff)
+            if(count - (int)maxcounts[i][0] > diff)    //Keeps track of index that produces the largest difference between counts
             {
                 diff = count - (int)maxcounts[i][0];
                 index = i;

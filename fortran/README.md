@@ -5,7 +5,7 @@ Language : Fortran
 To Compile:
 
     gfortran collatz.f90
-
+    
 To Run:
 
     a.out
